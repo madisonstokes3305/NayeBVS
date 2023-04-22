@@ -7,7 +7,6 @@ from datasets import load_dataset
 from flax.core.frozen_dict import freeze
 from jax.experimental.compilation_cache import compilation_cache as cc
 from jax.sharding import PartitionSpec as P
-from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import WhisperProcessor
 
@@ -65,7 +64,6 @@ def init_fn():
         decoder_input_ids=decoder_input_ids,
         decoder_attention_mask=decoder_attention_mask,
         decoder_position_ids=decoder_position_ids,
-        return_dict=False,
     )
     return init_params
 
@@ -126,7 +124,6 @@ librispeech_features = librispeech.features.keys()
 
 librispeech_processed = librispeech.map(preprocess, remove_columns=librispeech_features)
 
-eval_dataloader = DataLoader(
     librispeech_processed, batch_size=BATCH_SIZE, num_workers=NUM_WORKERS, persistent_workers=True
 )
 
